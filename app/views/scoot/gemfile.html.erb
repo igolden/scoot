@@ -1,10 +1,14 @@
 source: 'https://rubygems.org'
 
-
-
-<% if params[:preprocessor] == "1" %>
+<% if @asset_pipeline == "yes" %>
+  gem 'jekyll-assets'
+  gem 'uglifier'
 <% end %>
 
-<% if params[:preprocessor] == "1" %>
+<% if @preprocessor == "sass" %>
+  gem 'sass'
 <% end %>
+
+
+
 

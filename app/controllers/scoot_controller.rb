@@ -16,7 +16,7 @@ class ScootController < ApplicationController
          @dir = dir
 
          #Define Link to app/package_templates
-         assets = "#{Rails.root.to_s}/app/views/scoot/assets"
+         assets = "#{Rails.root.to_s}/app/views/scoot/packages"
          @assets_link = assets
 
          @framework = params[:framework]
@@ -24,16 +24,14 @@ class ScootController < ApplicationController
          @asset_pipeline = params[:asset_pipeline]
 
          def setup_folders
-           FileUtils.mkdir("#{@dir.to_s}/_assets") 
-           FileUtils.mkdir("#{@dir.to_s}/_includes") 
-           FileUtils.mkdir("#{@dir.to_s}/_layouts") 
            FileUtils.mkdir("#{@dir.to_s}/_plugins") 
-         end
-
-         def setup_assets
+           FileUtils.cp_r( "#{@assets_link}/#{@framework}/_assets", "#{@dir.to_s}/_assets") 
+           FileUtils.cp_r( "#{@assets_link}/#{@framework}/_includes", "#{@dir.to_s}/_includes") 
+           FileUtils.cp_r( "#{@assets_link}/#{@framework}/_layouts", "#{@dir.to_s}/_layouts") 
          end
 
          def setup_package
+           
          end
 
          def render_files
@@ -42,11 +40,18 @@ class ScootController < ApplicationController
            File.open("#{@dir.to_s}/.bowerrc", "w+"){|f| f << bowerrc }
            end
 
-           bowerjson = render_to_string( :partial => 'bowerjson', :formats => [:html] )
+           index = render_to_string( :partial => 'index', :formats => [:html] )
+           File.open("#{@dir.to_s}/index.html", "w+"){|f| f << index }
            gemfile = render_to_string( :partial => 'gemfile', :formats => [:html] )
-           File.open("#{@dir.to_s}/bower.json", "w+"){|f| f << bowerjson }
-           File.open("#{@dir.to_s}/Gemfile", "w+"){|f| f << gemfile }
 
+           bowerjson = render_to_string( :partial => 'bowerjson', :formats => [:html] )
+           File.open("#{@dir.to_s}/bower.json", "w+"){|f| f << bowerjson }
+
+           plugins_ext = render_to_string( :partial => 'plugins_ext', :formats => [:html] )
+           File.open("#{@dir.to_s}/_plugins/ext.rb", "w+"){|f| f << plugins_ext }
+
+           gemfile = render_to_string( :partial => 'gemfile', :formats => [:html] )
+           File.open("#{@dir.to_s}/Gemfile", "w+"){|f| f << gemfile }
          end
 
 

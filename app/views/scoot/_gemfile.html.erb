@@ -1,1 +1,10 @@
-gemfile
+source 'https://rubygems.org'
+
+<% if @asset_pipeline == 'yes' %>
+gem 'jekyll-assets'
+gem 'uglifier'
+<% end %>
+<% if @preprocessor == 'sass' %>
+gem 'sass'
+<% end %>
+
