@@ -1,3 +1,6 @@
+require 'zip'
+require 'export_file'
+
 class ScootController < ApplicationController
 
   def index
@@ -7,6 +10,13 @@ class ScootController < ApplicationController
   end
 
   def create
+    Dir.mktmpdir do |dir| 
+      @dir = dir
+    end
+      
+      #Define Link to app/package_templates
+      assets = "#{Rails.root.to_s}/app/views/scoot/assets"
+      @assets_link = assets
 
     @framework = params[:framework]
     @precompiler = params[:precompiler]
@@ -52,8 +62,8 @@ class ScootController < ApplicationController
     end
 
     def render_files
-    index = render_to_string( :partial => 'master', :formats => [:html] )
-    File.open("#{@dir.to_s}/index.html", "w+"){|f| f << index }
+    index = render_to_string( :partial => 'bowerrc', :formats => [:html] )
+    File.open("#{@dir.to_s}/", "w+"){|f| f << index }
     end
 
     def zip_assets
