@@ -1,4 +1,4 @@
-require 'zip'
+require 'zip_file_generator'
 require 'export_file'
 
 class ScootController < ApplicationController
@@ -10,75 +10,66 @@ class ScootController < ApplicationController
   end
 
   def create
-    Dir.mktmpdir do |dir| 
-      @dir = dir
-    end
-      
-      #Define Link to app/package_templates
-      assets = "#{Rails.root.to_s}/app/views/scoot/assets"
-      @assets_link = assets
+       Rails.cache.clear
 
-    @framework = params[:framework]
-    @precompiler = params[:precompiler]
-    @asset_pipeline = params[:asset_pipeline]
+       Dir.mktmpdir do |dir| 
+         @dir = dir
 
-    def setup_bower
-    
-      if @framework == 'foundation' 
-        # Bower RC
-        # Asset Config
-        # Copy HTML assets
-      end
-      if @framework == 'bootstrap' 
-        # Bower RC
-        # Asset Config
-        # Copy HTML assets
-      end
-      
-      if @precompiler == 'vanilla' 
-      end
-      if @precompiler == 'sass'
-      end
+         #Define Link to app/package_templates
+         assets = "#{Rails.root.to_s}/app/views/scoot/assets"
+         @assets_link = assets
+
+         @framework
+         @compiler
+         @asset_pipeline
+
+           if params[:framework] == "bootstrap"
+           end
+           if params[:framework] == "foundation"
+           end
+           if params[:preprocessor] == "sass"
+           end
 
 
-    end
+         def setup_gemfile
+         end
 
-    def setup_assets
-      if @asset_pipepline == 'vanilla'
-        # Gemfile include jekyl-assets
-        # plugins/ext.rb
-      end
-      if @asset_pipepline == 'yes'
-      end
-    end
+         def setup_assets
+         end
 
-    def setup_package
-      if @framework == 'foundation' 
-        # Copy assets from folder
-      end
-      if @framework == 'bootstrap'
-        # Copy assets from folder
-      end
-    end
+         def setup_package
+         end
 
-    def render_files
-    index = render_to_string( :partial => 'bowerrc', :formats => [:html] )
-    File.open("#{@dir.to_s}/", "w+"){|f| f << index }
-    end
+         def render_files
+           bowerrc = render_to_string( :partial => 'bowerrc', :formats => [:html] )
+           gemfile = render_to_string( :partial => 'bowerrc', :formats => [:html] )
+           bowerjson = render_to_string( :partial => 'bowerrc', :formats => [:html] )
 
-    def zip_assets
-      zip_param = params[:zip_name]
-      zip_name = "#{Rails.root.to_s}/tmp/cache/#{zip_param}.zip"
-      zipfile = ZipFileGenerator.new(@dir, zip_name)
-      zipfile.write
-      send_file zip_name, type: 'application/zip', disposition: 'attachment'
+           File.open("#{@dir.to_s}/.bowerrc", "w+"){|f| f << bowerrc }
+           File.open("#{@dir.to_s}/bower.json", "w+"){|f| f << bowerjson }
+           File.open("#{@dir.to_s}/Gemfile", "w+"){|f| f << gemfile }
 
-      export_file = ExportSuccess.new()
-      export_file.send
-    end
+         end
 
 
-  end
+         def export_zip_files
+           # Zip the files
+           zip_param = params[:zip_name]
+           zip_name = "#{Rails.root.to_s}/tmp/cache/#{zip_param}.zip"
+           zipfile = ZipFileGenerator.new(@dir, zip_name)
+           zipfile.write
+           send_file zip_name, type: 'application/zip', disposition: 'attachment'
+           export_file = ExportSuccess.new()
+           export_file.send
+         end
+
+         render_files
+         export_zip_files
+
+
+       end
 
 
 end
+end
+
