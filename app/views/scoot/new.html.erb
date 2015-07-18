@@ -1,12 +1,12 @@
     <div class="row">
       <div class="large-8 large-offset-2 columns text-center">
-        <h1>Scoot.rb</h1>
-        <h4 style="margin-bottom: 20px;">Open source templating that makes building static websites <br />faster,  easier and more fun.</h4>
+        <h1 style="font-size: 80px; margin: 100px 0 0;">.<strong>scoot</strong></h1>
+        <h4 style="margin-bottom: 20px;">Build It Faster.</h4>
       </div>
-        <hr>
     </div>
     <%= form_for :scoot, url: scoot_index_path do |f| %>
 				  <div class="row text-center mb-20">
+            <hr>
 				    <div class="large-4 medium-4 columns">
                 <h4>Framework</h4>
               <%= select_tag(:framework, options_for_select([['Foundation', 'foundation'], ['Bootstrap', 'bootstrap'], ['Neat', 'foundation'], ['Sassaparilla', 'foundation']], 'foundation')) %>
@@ -39,7 +39,7 @@
 				      <label>Keywords (type direct input to keyword meta field)</label>
               <%= text_area_tag(:website_keywords, "", size: "24x6") %>
 				      <label>Header Fonts</label>
-              <%= select_tag(:font, options_for_select([['Default', 1], ['Open Sans', 2], ['Lato', 3]         ]), size: "10", :style => "height:220px;") %>
+              <input class="fonts" name="fonts">
 				    </div>
 				  </div>
           <hr>
@@ -83,7 +83,7 @@
 				    </div>
 				  </div>
           <div class="row">
-            <h3>Templating</h3>
+            <h3>Starter Kit</h3>
           <p>Decide how your want your build setup to start.</p>
           </div>
 				  <div class="row text-center">
