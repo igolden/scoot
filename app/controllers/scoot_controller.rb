@@ -26,13 +26,32 @@ class ScootController < ApplicationController
         asset_pipeline = params[:asset_pipeline]
       end
       def render_scoot
-        scoot_meta = { 'scoot' => 
+        project_meta = { 'scoot' => 
                        { 
                          'package' => "#{@package}",  
                          'framework' => "#{@framework}",  
                          'compilers' => "#{@compilers}", 
                          'asset_pipeline' => "#{@asset_pipeline}" }
                       }
+        business_meta = { 'business' => 
+                       { 
+                         'name' => "",  
+                         'phone' => "",  
+                         'email' => "", 
+                         'fax' => "" }
+                      }
+        deploy_meta = { 'deploy' => 
+                       { 
+                         'ftp_host' => "yourdomain.com",  
+                         'ftp_dir' => "/public_html/",  
+                         'ftp_passive' => "false", 
+                         'ftp_port' => "21", 
+                         'ftp_username' => "username", 
+                         'ftp_password' => "password", 
+                         'ftp_secure' => "false" }
+                      }
+
+        scoot_meta = [project_meta, deploy_meta, business_meta].reduce({}, :merge)
 
         scoot = File.open("#{@dir.to_s}/.scoot", 'w+') { |f| YAML.dump(scoot_meta, f) }
       end
