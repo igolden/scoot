@@ -8,38 +8,38 @@ class ScootController < ApplicationController
 
     Dir.mktmpdir do |dir| 
       @dir = dir
-      @assets_link = "#{Rails.root.to_s}/app/views/scoot/packages"
-      @framework = params[:framework]
-      @compiler = params[:compiler]
-      @asset_pipeline = params[:asset_pipeline]
 
-      def setup_folders
-        FileUtils.mkdir("#{@dir.to_s}/_plugins") 
-        FileUtils.cp_r( "#{@assets_link}/#{@framework}/_assets", "#{@dir.to_s}/_assets") 
-        FileUtils.cp_r( "#{@assets_link}/#{@framework}/_includes", "#{@dir.to_s}/_includes") 
-        FileUtils.cp_r( "#{@assets_link}/#{@framework}/_layouts", "#{@dir.to_s}/_layouts") 
-        FileUtils.cp( "#{@assets_link}/#{@framework}/_config.yml", "#{@dir.to_s}/_config.yml") 
-        FileUtils.cp( "#{@assets_link}/#{@framework}/index.html", "#{@dir.to_s}/index.html") 
+      def configure_scoot
+        @package = params[:package]
+        @framework = params[:framework]
+        @compilers = params[:compilers]
+        @asset_pipeline = params[:asset_pipeline]
       end
 
-      def setup_package
+      def configure_deploy
       end
 
-      def render_files
-        if @asset_pipeline == 'yes'
-          bowerrc = render_to_string( :partial => 'bowerrc', :formats => [:html] )
-          File.open("#{@dir.to_s}/.bowerrc", "w+"){|f| f << bowerrc }
-        end
-        bowerjson = render_to_string( :partial => 'bowerjson', :formats => [:html] )
-        File.open("#{@dir.to_s}/bower.json", "w+"){|f| f << bowerjson }
-        plugins_ext = render_to_string( :partial => 'plugins_ext', :formats => [:html] )
-        File.open("#{@dir.to_s}/_plugins/ext.rb", "w+"){|f| f << plugins_ext }
-        gemfile = render_to_string( :partial => 'gemfile', :formats => [:html] )
-        File.open("#{@dir.to_s}/Gemfile", "w+"){|f| f << gemfile }
+      def configure_business
+        package = params[:package]
+        framework = params[:framework]
+        compilers = params[:compilers]
+        asset_pipeline = params[:asset_pipeline]
       end
-      def export_zip_files
+      def render_scoot
+        scoot_meta = { 'scoot' => 
+                       { 
+                         'package' => "#{@package}",  
+                         'framework' => "#{@framework}",  
+                         'compilers' => "#{@compilers}", 
+                         'asset_pipeline' => "#{@asset_pipeline}" }
+                      }
+
+        scoot = File.open("#{@dir.to_s}/.scoot", 'w+') { |f| YAML.dump(scoot_meta, f) }
+      end
+
+      def export_zip
         # Zip the files
-        zip_param = params[:zip_name]
+        zip_param = params[:file_name]
         zip_name = "#{Rails.root.to_s}/tmp/cache/#{zip_param}.zip"
         zipfile = ZipFileGenerator.new(@dir, zip_name)
         zipfile.write
@@ -48,10 +48,9 @@ class ScootController < ApplicationController
         export_file.send
       end
 
-      setup_folders
-      render_files
-      export_zip_files
+      configure_scoot
+      render_scoot
+      export_zip
     end
   end
 end
-
