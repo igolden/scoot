@@ -2,11 +2,45 @@
       <div class="large-8 large-offset-2 columns text-center">
         <h1 style="font-size: 80px; margin: 100px 0 0;">.<strong>scoot</strong></h1>
         <h4 style="margin-bottom: 20px;">Build It Faster.</h4>
+        <hr />
       </div>
     </div>
+    <div class="row">
+      <div class="large-8 large-offset-2 columns">
+        <p>
+        <strong>What is scoot?</strong>
+        <br />
+        Nunc et efficitur tellus, nec porta lacus. Nulla sollicitudin massa diam, non congue neque mollis non. In hac habitasse platea dictumst. Cras nec leo nec nibh tempus lobortis. Ut eget sollicitudin leo. In hac habitasse platea dictumst. Cras finibus ultrices tortor, non porta sem vehicula a. Aenean varius ullamcorper augue, facilisis tempus risus ultricies eget.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-8 large-offset-2 columns">
+        <p>
+        <strong>Why did we build it?</strong>
+        <br />
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-8 large-offset-2 columns">
+        <p>
+        <strong>How can you install?</strong>
+        <br />
+        </p>
+      </div>
+    </div>
+
+            <hr>
+    <div class="row">
+      <div class="large-8 large-offset-2 columns">
+        <h1 style="font-size: 40px; margin: 30px 0 0; text-align:center;">Build your .<strong>scoot</strong> file.</h1>
+      </div>
+    </div>
+
+    <!-- Begin .scoot file form -->
     <%= form_for :scoot, url: scoot_index_path do |f| %>
 				  <div class="row text-center mb-20">
-            <hr>
 				    <div class="large-4 medium-4 columns">
                 <h4>Framework</h4>
               <%= select_tag(:framework, options_for_select([['Foundation', 'foundation'], ['Bootstrap', 'bootstrap'], ['Neat', 'foundation'], ['Sassaparilla', 'foundation']], 'foundation')) %>
@@ -107,14 +141,19 @@
     
     
           <div class="row" style="margin-top: 80px;">
+            <div class="large-8 medium-8 large-offset-2 medium-offset-2 columns">
             <h3 class="text-center">Download Your Scoot File</h3>
-          <p class="text-center">Name your download file, and download already!</p>
+            <p class="text-center">This will download a zip folder containing your .scoot file.
+              <br />
+              <span style="font-size: 13px;">( Why is this a zip file? )</span>
+            </p>
+            </div>
           </div>
     
     
     
           <div class="row">
-            <div class="large-offset-2 large-8 columns">
+            <div class="large-offset-2 large-8 columns text-center">
               <%= text_field_tag(:file_name, "Name Your Zip") %>
             </div>
           
@@ -122,6 +161,8 @@
           <div class="row" style="margin-bottom: 80px;">
       <p class="text-center" style="margin-top:30px;">
       <%= f.submit 'Compile and Download', class: 'small success round button' %>
+              <br />
+              <span style="font-size: 15px;">To build your starter-kit, navigate the your folder and run 'scoot build'</span>
 </p>
     </div>
     <div class="row">
